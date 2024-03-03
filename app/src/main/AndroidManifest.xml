@@ -5,18 +5,20 @@
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BottomSheetImplementation"
-        tools:targetApi="31">
+        android:theme="@style/Theme.Quotify"
+        tools:targetApi="34">
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.quotify.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.BottomSheetImplementation">
+            android:theme="@style/Theme.Quotify">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,4 +1,4 @@
-package com.example.bottomsheetimplementation
+package com.example.quotify
 
 import org.junit.Test
 

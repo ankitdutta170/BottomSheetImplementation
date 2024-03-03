@@ -1,4 +1,4 @@
-package com.example.bottomsheetimplementation.ui.theme
+package com.example.quotify.ui.theme
 
 import android.app.Activity
 import android.os.Build

@@ -1,71 +1,71 @@
-package com.example.bottomsheetimplementation
+package com.example.quotify
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.bottomsheetimplementation.ui.theme.BottomSheetImplementationTheme
+import androidx.lifecycle.ViewModelProvider
+import com.example.bottomsheetimplementation.R
+import com.example.quotify.ui.theme.BottomSheetImplementationTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+    lateinit var mainViewModel: MainViewModel
+
+    private val quoteText: TextView
+        get() = findViewById(R.id.quoteText)
+
+    private val quoteAuthor: TextView
+        get() = findViewById(R.id.quoteAuthor)
+
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            BottomSheetImplementationTheme {
-                val scope = rememberCoroutineScope()
-                val bottomSheetSate =
-                    rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-                // A surface container using the 'background' color from the theme
+        setContentView(R.layout.activity_main)
+        mainViewModel = ViewModelProvider(this,MainViewModelFactory(applicationContext)).get(MainViewModel::class.java)
+        setQuote(mainViewModel.getQuote())
+    }
 
-                ModalBottomSheetLayout(
-                    sheetState = bottomSheetSate,
-                    sheetContent = {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(text = "Text 1")
-                            Text(text = "Text 2")
-                            Text(text = "Text 3")
-                            Text(text = "Text 4")
-                            Text(text = "Text 5")
-                            Text(text = "Text 6")
-                            Text(text = "Text 7")
-                            Text(text = "Text 8")
-                            Text(text = "Text 9")
-                            Text(text = "Text 10")
-                        }
-                    },
-                    sheetShape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp),
-                    sheetElevation = 12.dp
-                ) {
-                    MainContent(scope = scope, bottomSheetState = bottomSheetSate)
-                }
-            }
-        }
+    fun setQuote(quotes: Quotes){
+        quoteText.text = quotes.text
+        quoteAuthor.text = quotes.author
+    }
+
+    fun onPrevious(view: View) {
+        setQuote(mainViewModel.previousQuote())
+    }
+    fun onNext(view: View) {
+        setQuote(mainViewModel.nextQuote())
+    }
+
+    fun onShare(view: View) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.setType("text/plain")
+        intent.putExtra(Intent.EXTRA_TEXT,mainViewModel.getQuote().text)
+        startActivity(intent)
+
     }
 }
+
+
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
